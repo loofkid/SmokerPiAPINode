@@ -1,7 +1,11 @@
 const {eventEmitter: readerEventEmitter} = require("./background_services/reader");
-const {eventEmitter: controlEventEmitter, heating} = require("./background_services/smoker_control")
+const {eventEmitter: controlEventEmitter, heating} = require("./background_services/smoker_control");
+const {connectClient: connectRedisClient} = require("./services/redis");
 const {probes, maxTargetTemp} = require("./stores/probes");
 const express = require("express");
+
+const redisClient = connectRedisClient();
+
 
 const app = express();
 const PORT = 8080;
