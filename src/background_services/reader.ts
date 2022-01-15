@@ -1,8 +1,8 @@
-const {EventEmitter} = require('events');
-const {probes} = require("../stores/probes");
+import { EventEmitter } from 'events';
+import { probes } from "../stores/probes.js";
 const {chamberProbe, probe1, probe2, probe3, probe4} = probes;
 
-const eventEmitter = new EventEmitter();
+export const eventEmitter = new EventEmitter();
 
 const getRandomTempIncrease = () => Math.round(Math.random()) * (Math.round(Math.random())  == 0 ? -1 : 1);
 
@@ -15,7 +15,3 @@ setInterval(() => {
 
     eventEmitter.emit("valueRead");
 }, 2000);
-
-module.exports = {
-    eventEmitter: eventEmitter,
-}

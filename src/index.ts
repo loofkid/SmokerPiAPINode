@@ -1,10 +1,20 @@
-const {eventEmitter: readerEventEmitter} = require("./background_services/reader");
-const {eventEmitter: controlEventEmitter, heating} = require("./background_services/smoker_control");
-const {connectClient: connectRedisClient} = require("./services/redis");
-const {probes, maxTargetTemp} = require("./stores/probes");
-const express = require("express");
+import { eventEmitter as readerEventEmitter } from "./background_services/reader.js";
+import { eventEmitter as controlEventEmitter, heating } from "./background_services/smoker_control.js";
+import { connectClient as connectRedisClient, client as redisClient } from "./services/redis.js";
+import { probes, maxTargetTemp } from "./stores/probes.js";
+import { redisSetup } from "./setup.js";
+import express from "express";
 
-const redisClient = connectRedisClient();
+await connectRedisClient();
+const firstRun = Boolean((await redisClient.hGetAll("smokerpi:settings")).firstRun);
+
+const firstRunSetup = async () => {
+    await redisSetup(redisClient);
+}
+
+if (firstRun) {
+    await firstRunSetup();
+}
 
 
 const app = express();
