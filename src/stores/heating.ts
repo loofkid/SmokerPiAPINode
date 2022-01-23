@@ -1,0 +1,1 @@
+export let heating = {status: false};

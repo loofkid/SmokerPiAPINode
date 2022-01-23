@@ -1,6 +1,6 @@
 import { createClient } from "redis";
 
-const redisConfig = {
+export const redisConfig = {
     url: 'redis://loofkid:Take-Grew-Unhelpful-Espresso-Embolism-Serve@10.13.13.16'
 }
 
