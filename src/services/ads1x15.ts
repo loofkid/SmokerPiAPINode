@@ -15,7 +15,7 @@ export const getTemperature = async (channel: number, address: number) => {
     const probeVoltage: number = await adc.readSingleEnded({channel: channel});
     // console.log(probeVoltage);
 
-    const resistor2 = 21600;
+    const resistor2 = 100000;
     const aValue = 0.0007343140544;
     const bValue = 0.0002157437229;
     const cValue = 0.0000000951568577;
