@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "start-remote",
+            "problemMatcher": {
+                "base": "$eslint-stylish",
+                "background": {
+                    "beginsPattern": "rollup v2.67.0",
+                    "endsPattern": "Debugger listening on ws://0.0.0.0:9229/.*"
+                }
+            },
+            "label": "npm: start-remote",
+            "detail": "./start-remotely.sh",
+            "isBackground": true,
+            "runOptions": {
+                "instanceLimit": 1
+            },
+        },
+        {
+            "type": "shell",
+            "command": "ssh",
+            "args": ["pi@10.8.13.45", "killall node"],
+            "label": "ssh: kill-node",
+            "dependsOn": "npm: start-remote"
+        }
+    ]
+}

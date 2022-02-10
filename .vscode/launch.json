@@ -5,11 +5,38 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "address": "10.8.13.45",
+            "localRoot": "${workspaceFolder}",
+            "name": "Attach to Remote (just debug)",
+            "port": 9229,
+            "remoteRoot": "/home/pi/Documents/source/repos/SmokerPiAPINode",
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        
+        {
+            "address": "10.8.13.45",
+            "localRoot": "${workspaceFolder}",
+            "name": "Attach to Remote",
+            "port": 9229,
+            "remoteRoot": "/home/pi/Documents/source/repos/SmokerPiAPINode",
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node",
+            "preLaunchTask": "npm: start-remote",
+            "timeout": 15000
+        },
+        {
             "name": "Launch via NPM",
             "request": "launch",
             "runtimeArgs": [
-                "start",
-                "debug"
+                "run",
+                "start-remote"
             ],
             "runtimeExecutable": "npm",
             "skipFiles": [

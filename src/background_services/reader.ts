@@ -1,41 +1,28 @@
 import { EventEmitter } from 'events';
-import { getTemperature } from '../services/ads1x15.js';
-import { probes, Probe } from "../stores/probes.js";
-const {chamberProbe, probe1, probe2, probe3, probe4} = probes;
+// import { getTemperature, eventEmitter as adsEventEmitter } from '../services/ads1x15.js';
+import {temperatureSensor} from '../services/temperatureI2C';
+import { probes, Probe } from "../stores/probes";
+// const {chamberProbe, probe1, probe2, probe3, probe4} = probes;
 
 export const eventEmitter = new EventEmitter();
 
-const getRandomTempIncrease = () => Math.round(Math.random()) * (Math.round(Math.random())  == 0 ? -1 : 1);
+const getProbeTemps = async () => {
+    const temps = await temperatureSensor.readTemperatures();
 
-const readProbeTemp = async (probe: Probe) => {
-    const probeTemp = await getTemperature(probe.channel, probe.address);
-    if (probeTemp < -128.6 && probe.connected) {
-        probe.currentValue = 0;
-        probe.connected = false;
-        console.log(`${probe.name} probe not detected!`);
-        eventEmitter.emit("probeDisconnect", probe.id);
-    }
-    else if (probeTemp >= -128.6 && !probe.connected) {
-        probe.currentValue = probeTemp;
-        probe.connected = true;
-        console.log(`${probe.name} probe connected!`);
-        eventEmitter.emit("probeConnect", probe.id);
-    }
-    else if (!probe.connected) {
-        probe.currentValue = 0;
-    }
-    else {
-        probe.currentValue = probeTemp;
-    }
+    probes().forEach((probe, i) => {
+        probe.currentValue = temps[i];
+        if (probe.connected && (temps[i] == -500 || temps[i] == -800)) probe.connected = false;
+        if (!probe.connected && temps[i] != -500 && temps[i] != -800) probe.connected = true;
+    });
+    probes(probes());
 }
 
 setInterval(async () => {
     // chamberProbe.currentValue += getRandomTempIncrease();
-    await readProbeTemp(chamberProbe);
-    probe1.currentValue += getRandomTempIncrease();
-    probe2.currentValue += getRandomTempIncrease();
-    probe3.currentValue += getRandomTempIncrease();
-    probe4.currentValue += getRandomTempIncrease();
+    // for (const probe of Object.keys(probes)) {
+    //     readProbeTemp(probes[probe]);
+    // }
+    await getProbeTemps();
 
     eventEmitter.emit("valueRead");
-}, 500);
+}, 1000);

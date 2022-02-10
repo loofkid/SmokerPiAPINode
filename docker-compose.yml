@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  api:
+    image: "smokerpiapi:latest"
+    privileged: true
+    restart: unless-stopped
+    group_add: 
+      - gpio
+      - i2c
+    volumes:
+      - /home/pi/Documents/source/repos/SmokerPiAPINode:/app
+    ports:
+      - 8080:8080
+    devices:
+      - /dev/i2c-1:/dev/i2c-1
+      - /dev/gpiochip0:/dev/gpiochip0
+volumes:
+  api:

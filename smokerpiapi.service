@@ -1,0 +1,13 @@
+[Unit]
+Description=SmokerPi API Service
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /home/pi/Documents/source/repos/SmokerPiAPINode/startup.sh
+Restart=always
+Environment=NODE_ENV=development
+WorkingDirectory=/home/pi/Documents/source/repos/SmokerPiAPINode
+SyslogIdentifier=smokerpiapi
+
+[Install]
+WantedBy=multi-user.target
